@@ -196,8 +196,24 @@ document.getElementById("order-form")
 
             messageElement.innerHTML = `
                 <strong>Order placed successfully!</strong><br>
-                Thank you, ${result.customer}.<br>
-                Your order total is ₹${result.total}.
+                Thank you, ${result.customer}.<br><br>
+
+                <strong style="font-size:18px;">
+                    Order ID: #${result.order_id}
+                </strong><br>
+
+                Your order total is ₹${result.total}.<br><br>
+
+                <a href="/track-order"
+                   style="display:inline-block;
+                          margin-top:10px;
+                          padding:10px 18px;
+                          background:#23845b;
+                          color:white;
+                          border-radius:8px;
+                          text-decoration:none;">
+                    Track Your Order
+                </a>
             `;
 
             clearCart();
