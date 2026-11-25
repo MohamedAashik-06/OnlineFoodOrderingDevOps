@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crave | Admin Orders</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #fff8f0;
+            margin: 0;
+            padding: 30px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: auto;
+        }
+
+        h1 {
+            color: #e87524;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #777;
+            margin-bottom: 30px;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #e87524;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        th, td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background: #e87524;
+            color: white;
+        }
+
+        tr:hover {
+            background: #fff3e5;
+        }
+
+        .status-form {
+            margin: 0;
+        }
+
+        .status-select {
+            padding: 9px 12px;
+            border: 1px solid #f0c49c;
+            border-radius: 8px;
+            background: #fff8f0;
+            color: #333;
+            font-weight: bold;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .status-select:focus {
+            border-color: #e87524;
+        }
+
+        .status-select.pending {
+            color: #b66a00;
+        }
+
+        .status-select.preparing {
+            color: #2563eb;
+        }
+
+        .status-select.delivered {
+            color: #23845b;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .total {
+            font-weight: bold;
+            color: #23845b;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #888;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <a class="back" href="/">← Back to Website</a>
+
+    <h1>Crave Admin Dashboard</h1>
+    <p class="subtitle">Customer Order Management</p>
+
+    <div class="table-container">
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Phone</th>
+                    <th>Address</th>
+                    <th>Food Items</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for order in orders %}
+
+                <tr>
+                    <td>#{{ order.id }}</td>
+
+                    <td>{{ order.customer_name }}</td>
+
+                    <td>{{ order.phone }}</td>
+
+                    <td>{{ order.address }}</td>
+
+                    <td>
+                        {% for item in order.items_list %}
+                            {{ item.name }} × {{ item.quantity }}
+                            <br>
+                        {% endfor %}
+                    </td>
+
+                    <td class="total">₹{{ order.total }}</td>
+
+                    <td>
+                        <form class="status-form"
+                              action="/update-status/{{ order.id }}"
+                              method="POST">
+
+                            <select name="status"
+                                    class="status-select {{ order.status|lower }}"
+                                    onchange="this.form.submit()">
+
+                                <option value="Pending"
+                                    {% if order.status == 'Pending' %}selected{% endif %}>
+                                    Pending
+                                </option>
+
+                                <option value="Preparing"
+                                    {% if order.status == 'Preparing' %}selected{% endif %}>
+                                    Preparing
+                                </option>
+
+                                <option value="Delivered"
+                                    {% if order.status == 'Delivered' %}selected{% endif %}>
+                                    Delivered
+                                </option>
+
+                            </select>
+
+                        </form>
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+                {% if not orders %}
+                <tr>
+                    <td colspan="7" class="empty">
+                        No orders available yet.
+                    </td>
+                </tr>
+                {% endif %}
+
+            </tbody>
+        </table>
+
+    </div>
+
+    <footer>
+        Crave Online Food Ordering System
+    </footer>
+
+</div>
+
+</body>
+</html>

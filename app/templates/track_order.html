@@ -1,0 +1,206 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crave | Track Your Order</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #fff8f0;
+            color: #333;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 50px auto;
+            background: white;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            text-align: center;
+            color: #e87524;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #777;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-top: 18px;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 14px;
+            background: #e87524;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #cf641b;
+        }
+
+        .error {
+            background: #ffe5e5;
+            color: #c62828;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .result {
+            margin-top: 25px;
+            padding: 22px;
+            background: #fff8f0;
+            border-radius: 12px;
+            border: 1px solid #f3d2b5;
+        }
+
+        .result h2 {
+            color: #e87524;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .pending {
+            background: #fff0d9;
+            color: #b66a00;
+        }
+
+        .preparing {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .delivered {
+            background: #dcfce7;
+            color: #23845b;
+        }
+
+        .back {
+            display: block;
+            text-align: center;
+            margin-top: 25px;
+            text-decoration: none;
+            color: #e87524;
+            font-weight: bold;
+        }
+
+        .item {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .total {
+            color: #23845b;
+            font-weight: bold;
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Track Your Order 🍔</h1>
+
+    <p class="subtitle">
+        Enter your order ID and phone number to check your order status.
+    </p>
+
+    <form method="POST" action="/track-order">
+
+        <label for="order_id">Order ID</label>
+        <input type="number" id="order_id" name="order_id"
+               placeholder="Enter your order ID" required>
+
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" name="phone"
+               placeholder="Enter your 10-digit phone number"
+               pattern="[0-9]{10}" maxlength="10" required>
+
+        <button type="submit">Track Order</button>
+
+    </form>
+
+    {% if error %}
+        <div class="error">
+            {{ error }}
+        </div>
+    {% endif %}
+
+    {% if order %}
+
+    <div class="result">
+
+        <h2>Order #{{ order.id }}</h2>
+
+        <p><strong>Customer:</strong> {{ order.customer_name }}</p>
+
+        <p><strong>Delivery Address:</strong> {{ order.address }}</p>
+
+        <h3>Food Items</h3>
+
+        {% for item in order.items_list %}
+            <div class="item">
+                {{ item.name }} × {{ item.quantity }}
+                — ₹{{ item.subtotal }}
+            </div>
+        {% endfor %}
+
+        <p class="total">Total: ₹{{ order.total }}</p>
+
+        <p><strong>Order Status:</strong></p>
+
+        <span class="status {{ order.status|lower }}">
+            {{ order.status }}
+        </span>
+
+    </div>
+
+    {% endif %}
+
+    <a href="/" class="back">← Back to Website</a>
+
+</div>
+
+</body>
+</html>

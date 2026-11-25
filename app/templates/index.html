@@ -1,0 +1,306 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Crave | Online Food Ordering</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- NAVIGATION -->
+    <nav class="navbar">
+    <div class="logo">Crave<span>.</span></div>
+
+    <div class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#menu">Menu</a>
+        <a href="#cart">Cart <span class="cart-badge" id="nav-cart-count">0</span></a>
+        <a href="#order">Order</a>
+        <a href="#about">About</a>
+        <a href="/track-order" class="track-link">Track Order</a>
+        <a href="/admin/orders" class="admin-link">Admin</a>
+    </div>
+</nav>
+
+
+    <!-- HERO SECTION -->
+    <section class="hero" id="home">
+
+        <div class="hero-content">
+
+            <span class="hero-tag">FRESH • DELICIOUS • FAST</span>
+
+            <h1>
+                Delicious Food,<br>
+                <span>Delivered To You.</span>
+            </h1>
+
+            <p>
+                Explore mouth-watering dishes made with love.
+                Order your favourites and enjoy delicious food
+                from the comfort of your home.
+            </p>
+
+            <a href="#menu" class="hero-button">
+                Explore Our Menu →
+            </a>
+
+        </div>
+
+        <div class="hero-image">
+            <img
+                src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=900&q=80"
+                alt="Delicious pizza"
+                onerror="this.onerror=null;this.src='https://placehold.co/800x500?text=Delicious+Food';">
+        </div>
+
+    </section>
+
+
+    <!-- MENU SECTION -->
+    <section class="menu-section" id="menu">
+
+        <div class="section-heading">
+
+            <span class="section-label">OUR MENU</span>
+
+            <h2>Explore Our Menu</h2>
+
+            <p>
+                Discover your favourite dishes and enjoy
+                the taste of happiness.
+            </p>
+
+        </div>
+
+        <div class="menu-grid">
+
+            {% for item in menu_items %}
+
+            <div class="food-card">
+
+                <img
+                    src="{{ item.image }}"
+                    alt="{{ item.name }}"
+                    loading="lazy"
+                    onerror="this.onerror=null;this.src='https://placehold.co/600x400?text=Food+Image';">
+
+                <div class="food-card-content">
+
+                    <span class="food-category">
+                        {{ item.category }}
+                    </span>
+
+                    <h3>{{ item.name }}</h3>
+
+                    <p>{{ item.description }}</p>
+
+                    <div class="food-card-bottom">
+
+                        <strong>₹{{ item.price }}</strong>
+
+                        <button
+                            type="button"
+                            class="add-button"
+                            data-id="{{ item.id }}"
+                            aria-label="Add {{ item.name }} to cart">
+                            +
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+
+    <!-- CART SECTION -->
+    <section class="cart-section" id="cart">
+
+        <div class="section-heading">
+
+            <span class="section-label">YOUR SELECTION</span>
+
+            <h2>Your Shopping Cart</h2>
+
+            <p>
+                Review your items before completing your order.
+            </p>
+
+        </div>
+
+        <div id="cart-items">
+
+            <p class="empty-cart">
+                Your cart is empty. Add some delicious food!
+            </p>
+
+        </div>
+
+        <div class="cart-total">
+
+            <h3>
+                Total Amount:
+                ₹<span id="cart-total">0</span>
+            </h3>
+
+            <button
+                type="button"
+                id="clear-cart"
+                class="clear-button">
+                Clear Cart
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ORDER SECTION -->
+    <section class="order-section" id="order">
+
+        <div class="section-heading">
+
+            <span class="section-label">CHECKOUT</span>
+
+            <h2>Complete Your Order</h2>
+
+            <p>
+                Provide your delivery details to get
+                your favourite food delivered.
+            </p>
+
+        </div>
+
+        <div class="order-form-container">
+
+            <form id="order-form">
+
+                <div class="form-group">
+
+                    <label for="customer-name">
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="customer-name"
+                        name="customer_name"
+                        placeholder="Enter your full name"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="customer-phone">
+                        Phone Number
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="customer-phone"
+                        name="customer_phone"
+                        placeholder="Enter 10-digit phone number"
+                        pattern="[0-9]{10}"
+                        maxlength="10"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="customer-address">
+                        Delivery Address
+                    </label>
+
+                    <textarea
+                        id="customer-address"
+                        name="customer_address"
+                        rows="4"
+                        placeholder="Enter your complete delivery address"
+                        required></textarea>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="order-button">
+                    Place My Order →
+                </button>
+
+            </form>
+
+            <p id="order-message"></p>
+
+        </div>
+
+    </section>
+
+
+    <!-- ABOUT SECTION -->
+    <section class="about-section" id="about">
+
+        <div class="about-content">
+
+            <span class="section-label">
+                ABOUT US
+            </span>
+
+            <h2>Food That Makes You Happy</h2>
+
+            <p>
+                Crave is an online food ordering platform designed
+                to make food ordering easy, convenient and enjoyable.
+                Customers can explore a variety of delicious meals,
+                add food items to their cart and prepare their
+                delivery details through a simple interface.
+            </p>
+
+            <p>
+                Our goal is to create a convenient digital food
+                ordering experience using modern web technologies.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- FOOTER -->
+    <footer class="footer">
+
+        <h2>Crave<span>.</span></h2>
+
+        <p>Good Food. Good Mood.</p>
+
+        <p>
+            &copy; 2026 Crave Online Food Ordering System.
+        </p>
+
+    </footer>
+
+
+    <!-- CART JAVASCRIPT -->
+    <script src="{{ url_for('static', filename='cart.js') }}"></script>
+
+</body>
+</html>
