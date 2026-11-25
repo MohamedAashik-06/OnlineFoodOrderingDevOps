@@ -29,7 +29,7 @@ def register_routes(app):
             "category": "Biryani",
             "price": 220,
             "description": "Aromatic rice with flavourful chicken.",
-            "image": "https://images.unsplash.com/photo-1563379091339-03246963d96c?auto=format&fit=crop&w=600&q=80"
+            "image": "https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=600&q=80"
         },
         {
             "id": 4,
